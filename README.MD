@@ -25,9 +25,9 @@ def changePath():
 ## Motivation
 
 Create a realtively cheap robot that contains the following features:
-Remote Control
-Obstacle Avoidance
-Livestream Video
+...Remote Control Functionality
+...Obstacle Avoidance
+...Livestream Video
 
 ## Installation
 
