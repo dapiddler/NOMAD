@@ -49,6 +49,9 @@ Keyboard controls:
 * K - Kill Obstacle avoidance thread
 * Q - Exit script
 
+Livestream:
+Navigate to http://[RPI-IP]:8080/stream after running script
+
 ## License
 
 MIT
