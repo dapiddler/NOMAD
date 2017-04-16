@@ -35,6 +35,17 @@ Install adafruit library - https://learn.adafruit.com/adafruit-16-channel-servo-
 
 Install UV4L - https://www.linux-projects.org/uv4l/installation/
 
+## Usage
+
+Keyboard controls:
+* W - Forward
+* S - Reverse
+* A - Left
+* D - Right
+* I - Create Obstacle avoidance thread
+* K - Kill Obstacle avoidance thread
+* Q - Exit script
+
 ## License
 
 MIT
