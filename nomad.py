@@ -12,6 +12,7 @@ from SR04 import ping
 MAX_DISTANCE = 300 # sets maximum useable sensor measuring distance to 300cm
 COLL_DIST = 45 # sets distance at which robot stops and reverses to 30cm
 TURN_DIST = COLL_DIST+20 # sets distance at which robot veers away from object
+
 #distances on either side
 leftDistance = 0
 rightDistance = 0
@@ -90,16 +91,6 @@ def servo_center():
 def servo_right():
     pwm.set_pwm(0, 0, servo_max)
 
-def servo_sweep():
-    servo_right()
-    time.sleep(1)
-    ping()
-    servo_left()
-    time.sleep(1)
-    ping()
-    servo_center()
-    time.sleep(1)
-
 def loop():
     servo_center()
     curDist = ping() # read distance in cm
@@ -109,7 +100,6 @@ def loop():
         changePath() # if forward is blocked change direction
     forward(.025)
     print("moving forwards")
-
 
 def changePath():
     print("stopping")
@@ -189,9 +179,7 @@ def main():
                 stop()
             break # Exit the while()
 
-
     curses.endwin()
-    
 
 if __name__ == "__main__":
     os.system('uv4l --driver raspicam --auto-video_nr --width 640 --height 480 --encoding jpeg') #initiate uv4l video streaming server
