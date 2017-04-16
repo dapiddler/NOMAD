@@ -1,5 +1,5 @@
-#Nomad
-### A nomad is a person with no settled home, moving from place to place as a way of obtaining food, finding pasture for livestock, or otherwise making a living. The word Nomad comes from a Greek word that means one who wanders for pasture.
+# Nomad
+#### A nomad is a person with no settled home, moving from place to place as a way of obtaining food, finding pasture for livestock, or otherwise making a living. The word Nomad comes from a Greek word that means one who wanders for pasture.
 
 ## Synopsis
 
