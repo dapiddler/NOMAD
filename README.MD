@@ -27,7 +27,7 @@ def changePath():
 
 ## Motivation
 
-Create a realtively cheap robot that contains the following features:
+Create a realtively cheap robot for educational purposes that contains the following features:
 1. Remote Control Functionality
 2. Obstacle Avoidance
 3. Livestream Video
