@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import time
-GPIO.setwarnings(False)
+
 
 def ping():
 	"""Get reading from HC-SR04"""
@@ -34,8 +34,6 @@ def ping():
 	#print "Distance:",distance,"cm"
 
 	return distance
-	 
-	GPIO.cleanup()
 
 
 
