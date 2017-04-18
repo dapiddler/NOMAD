@@ -185,3 +185,12 @@ if __name__ == "__main__":
     os.system('uv4l --driver raspicam --auto-video_nr --width 640 --height 480 --encoding jpeg') #initiate uv4l video streaming server
     main()
     os.system('pkill uv4l') #kill uv4l video streaming server
+
+
+#features
+
+#refactor code
+#add frontend (embed livestream, display telemetry data, and implement controls on website )
+#add snapshot functionality
+#build bluetooth beacon and implement waypoints
+
