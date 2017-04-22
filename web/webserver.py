@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import render_template
+from flask import jsonify
 import config
 from datetime import datetime
 
@@ -28,6 +29,19 @@ def stuff():
 	if request.method == 'GET':
 		test = str(datetime.now())
     	return test
+
+# @app.route('/ping/', methods=['POST'])
+# def ping():
+#
+#     right=request.form['youremail']
+#     return render_template('index.html', left=left, right=right)
+
+@app.route('/events', methods=['GET', 'POST'])
+def events():
+    content = request.json
+    print content['value']
+    return jsonify({"content":content})
+
 
 
 if __name__ == "__main__":
