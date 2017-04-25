@@ -5,10 +5,9 @@ from flask import jsonify
 import config
 from datetime import datetime
 
-
-
-
 app = Flask(__name__)
+
+heading = dict()
 
 @app.route("/")
 def main():
@@ -27,22 +26,23 @@ def nomad():
 @app.route('/_stuff', methods=['GET'])
 def stuff():
 	if request.method == 'GET':
-		test = str(datetime.now())
-    	return test
-
-# @app.route('/ping/', methods=['POST'])
-# def ping():
-#
-#     right=request.form['youremail']
-#     return render_template('index.html', left=left, right=right)
+		if heading:
+			global heading
+			#test = str(datetime.now())
+			print heading['value']
+			return (heading['value'])
+		else :
+			blank = ""
+			return blank
 
 @app.route('/events', methods=['GET', 'POST'])
 def events():
-    content = request.json
-    print content['value']
-    return jsonify({"content":content})
+	global heading
+	heading = request.json
+	print heading['value']
+	return jsonify({"content":heading})
 
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host=str(config.LOCAL_DNS_HOST))
+	app.run(debug=True, host=str(config.LOCAL_DNS_HOST))
