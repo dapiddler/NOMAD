@@ -25,9 +25,9 @@ def nomad():
 
 @app.route('/_stuff', methods=['GET'])
 def stuff():
+	global heading
 	if request.method == 'GET':
 		if heading:
-			global heading
 			#test = str(datetime.now())
 			print heading['value']
 			return (heading['value'])
