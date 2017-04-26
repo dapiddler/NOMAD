@@ -9,8 +9,10 @@ import threading
 import PCA9685
 import signal
 import requests
+from HOST import get_ip
 from SR04 import ping
 
+rpiIP = str(get_ip())
 MAX_DISTANCE = 300 # sets maximum useable sensor measuring distance to 300cm
 COLL_DIST = 45 # sets distance at which robot stops and reverses to 30cm
 TURN_DIST = COLL_DIST+20 # sets distance at which robot veers away from object
@@ -84,7 +86,7 @@ def set_servo_pulse(channel, pulse):
     pwm.set_pwm(channel, 0, pulse)
 
 def message(input):
-    url = "http://192.168.1.124:5000/events"
+    url = "http://%s:5000/events" %(rpiIP)
 
     payload = "{\"value\":\"%s\"}" %(input)
     headers = {
