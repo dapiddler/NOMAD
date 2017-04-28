@@ -34,9 +34,9 @@ Create a realtively cheap robot for educational purposes that contains the follo
 
 ## Installation
 
-'''bash
+```
 pip install requirements.txt
-'''
+```
 
 Install UV4L - https://www.linux-projects.org/uv4l/installation/
 
@@ -54,7 +54,7 @@ Keyboard controls:
 Dashboard:
 Navigate to http://[RPI-IP]:5000/nomad/
 
-![Screenshot](Dashboard.png)
+![alt text](https://github.com/dapiddler/NOMAD/blob/development/Dashboard.PNG "dash")
 
 ## License
 
