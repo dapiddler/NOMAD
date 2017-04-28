@@ -24,14 +24,12 @@ rightDistance = 0
 curDist = 0
 
 pwm = PCA9685.PCA9685()
+pwm.set_pwm_freq(60) # Set frequency to 60hz, good for servos.
 
 # Configure min and max servo pulse lengths
 servo_min = 300  # Min pulse length out of 4096
 servo_max = 500  # Max pulse length out of 4096
 servo_mid = 405 # Mid pulse length out of 4096
-
-# Set frequency to 60hz, good for servos.
-pwm.set_pwm_freq(60)
 
 def init():
     """GPIO setup"""
@@ -75,8 +73,9 @@ def stop():
     gpio.output(13, False) 
     gpio.output(12, False)
 
-# Helper function to make setting a servo pulse width simpler.
+
 def set_servo_pulse(channel, pulse):
+    """Helper function to make setting a servo pulse width simpler."""
     pulse_length = 1000000    # 1,000,000 us per second
     pulse_length //= 60       # 60 Hz
     print('{0}us per period'.format(pulse_length))
@@ -89,17 +88,13 @@ def set_servo_pulse(channel, pulse):
 def message(input):
     """sends current status to flask server"""
     url = "http://%s:5000/events" %(rpiIP)
-
     payload = "{\"value\":\"%s\"}" %(input)
     headers = {
         'content-type': "application/json",
         'cache-control': "no-cache",
         'postman-token': "49121925-c1b5-8071-4463-8c1f8f835a9a"
     }
-
     response = requests.request("POST", url, data=payload, headers=headers)
-
-    #print(response.text)
 
 def servo_left():
     """Physically move servo to left most position"""
@@ -121,7 +116,6 @@ def loop():
         print("changing directions")
         stop()
         changePath() # if forward is blocked change direction
-        #message("")
     forward(.025)
     print("moving forwards")
 
@@ -174,8 +168,6 @@ def check_kill_process(pstring):
 
 def main():
     init()
-
-
 
     stdscr = curses.initscr()
 
@@ -231,12 +223,3 @@ if __name__ == "__main__":
     os.system('pkill uv4l') #kill uv4l video streaming server
     check_kill_process("python") # kill flask server
     process.kill() # kill flask server dead
-
-
-#features
-
-#refactor code
-#add frontend (embed livestream, display telemetry data, and implement controls on website )
-#add snapshot functionality
-#build bluetooth beacon and implement waypoints
-
