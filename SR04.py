@@ -1,6 +1,9 @@
 import RPi.GPIO as GPIO
 import time
+<<<<<<< HEAD
 
+=======
+>>>>>>> development
 
 def ping():
 	"""Get reading from HC-SR04"""

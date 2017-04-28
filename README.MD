@@ -34,7 +34,9 @@ Create a realtively cheap robot for educational purposes that contains the follo
 
 ## Installation
 
-Install adafruit library - https://learn.adafruit.com/adafruit-16-channel-servo-driver-with-raspberry-pi/using-the-adafruit-library
+```
+pip install requirements.txt
+```
 
 Install UV4L - https://www.linux-projects.org/uv4l/installation/
 
@@ -49,8 +51,10 @@ Keyboard controls:
 * K - Kill Obstacle avoidance thread
 * Q - Exit script
 
-Livestream:
-Navigate to http://[RPI-IP]:8080/stream after running script
+Dashboard:
+Navigate to http://[RPI-IP]:5000/nomad/
+
+![alt text](https://github.com/dapiddler/NOMAD/blob/development/Dashboard.PNG "dash")
 
 ## License
 
