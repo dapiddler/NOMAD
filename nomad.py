@@ -13,7 +13,7 @@ import subprocess as sp
 from HOST import get_ip
 from SR04 import ping
 
-rpiIP = str(get_ip())
+rpiIP = str(get_ip()) #sets ip address of raspberry pi
 MAX_DISTANCE = 300 # sets maximum useable sensor measuring distance to 300cm
 COLL_DIST = 45 # sets distance at which robot stops and reverses to 30cm
 TURN_DIST = COLL_DIST+20 # sets distance at which robot veers away from object
@@ -28,7 +28,7 @@ pwm = PCA9685.PCA9685()
 # Configure min and max servo pulse lengths
 servo_min = 300  # Min pulse length out of 4096
 servo_max = 500  # Max pulse length out of 4096
-servo_mid = 405
+servo_mid = 405 # Mid pulse length out of 4096
 
 # Set frequency to 60hz, good for servos.
 pwm.set_pwm_freq(60)
@@ -87,6 +87,7 @@ def set_servo_pulse(channel, pulse):
     pwm.set_pwm(channel, 0, pulse)
 
 def message(input):
+    """sends current status to flask server"""
     url = "http://%s:5000/events" %(rpiIP)
 
     payload = "{\"value\":\"%s\"}" %(input)
@@ -101,15 +102,19 @@ def message(input):
     #print(response.text)
 
 def servo_left():
+    """Physically move servo to left most position"""
     pwm.set_pwm(0, 0, servo_min)
 
 def servo_center():
+    """Physically move servo to center position"""
     pwm.set_pwm(0, 0, servo_mid)
 
 def servo_right():
+    """Physically move servo to right most position"""
     pwm.set_pwm(0, 0, servo_max)
 
 def loop():
+    """Main obstacle avoidance loop"""
     servo_center()
     curDist = ping() # read distance in cm
     if (curDist < COLL_DIST):
@@ -121,6 +126,7 @@ def loop():
     print("moving forwards")
 
 def changePath():
+    """stores distance values and calls function"""
     print("stopping")
     servo_right()
     time.sleep(.5)
@@ -137,6 +143,7 @@ def changePath():
     compareDistance(leftDistance,rightDistance)
 
 def compareDistance(leftUnit,rightUnit):
+    """compares values and moves robot"""
     if (leftUnit>rightUnit):
         left(2)
         print("turning left")
@@ -151,7 +158,7 @@ def compareDistance(leftUnit,rightUnit):
         message("pulling a u-turn")
 
 def doit(arg):
-    """AI thread with exit flag"""
+    """create AI thread with exit flag"""
     t = threading.currentThread()
     while getattr(t, "do_run", True):
         print ("working on %s" % arg)
@@ -159,6 +166,7 @@ def doit(arg):
     print("Exiting AI process")
 
 def check_kill_process(pstring):
+    """Kills python process"""
     for line in os.popen("ps ax | grep " + pstring + " | grep -v grep"):
         fields = line.split()
         pid = fields[0]

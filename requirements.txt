@@ -1,0 +1,4 @@
+Adafruit-GPIO (1.0.3)
+Adafruit-PCA9685 (1.0.1)
+Flask (0.10.1)
+requests (2.4.3)
