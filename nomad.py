@@ -13,6 +13,7 @@ import subprocess as sp
 from HOST import get_ip
 from SR04 import ping
 
+
 rpiIP = str(get_ip()) #sets ip address of raspberry pi
 MAX_DISTANCE = 300 # sets maximum useable sensor measuring distance to 300cm
 COLL_DIST = 45 # sets distance at which robot stops and reverses to 30cm
@@ -168,7 +169,7 @@ def check_kill_process(pstring):
 
 def main():
     init()
-
+    t = None
     stdscr = curses.initscr()
 
     curses.noecho()
@@ -176,16 +177,22 @@ def main():
         while 1:
             c = stdscr.getch()
             if c == ord('i'):
-                print("Thread Started")
-                t = threading.Thread(target=doit, args=("",))
-                t.start()
-                print(c)
+                if t == None:
+                    print("Thread Started")
+                    t = threading.Thread(target=doit, args=("",))
+                    t.start()
+                    print(c)
+                else :
+                    print("Thread already running")
             elif c == ord('k'):
-                print("Thread Ended")
-                t.do_run = False
-                t.join()
-                stop()
-                print(c)
+                if t != None:
+                    print("Thread Ended")
+                    t.do_run = False
+                    t.join()
+                    stop()
+                    print(c)
+                else:
+                    print("No Thread to kill")
             elif c == ord('w'):
                 forward(.035)
                 stop()
@@ -203,16 +210,17 @@ def main():
                 stop()
                 print c
             elif c == ord('q'):
-                if t.isAlive():
+                if t != None:
                     t.do_run = False
                     t.join()
                     stop()
                     break
-                    gpio.cleanup()
-                break
-                gpio.cleanup()
+                else:
+                    stop()
+                    break
     except NameError:
-        gpio.cleanup()
+        print("Error")
+
 
     curses.endwin()
 
@@ -220,6 +228,9 @@ if __name__ == "__main__":
     os.system('uv4l --driver raspicam --auto-video_nr --width 640 --height 480 --encoding jpeg') #initiate uv4l video streaming server
     process = sp.Popen('python /home/pi/NOMAD/web/webserver.py', shell=True, stdout=sp.PIPE, stderr=sp.PIPE) #start flask server
     main()
+    time.sleep(1)
+    gpio.cleanup()
     os.system('pkill uv4l') #kill uv4l video streaming server
     check_kill_process("python") # kill flask server
     process.kill() # kill flask server dead
+
