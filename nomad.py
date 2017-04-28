@@ -9,6 +9,7 @@ import threading
 import PCA9685
 import signal
 import requests
+import subprocess as sp
 from HOST import get_ip
 from SR04 import ping
 
@@ -217,9 +218,11 @@ def main():
 
 if __name__ == "__main__":
     os.system('uv4l --driver raspicam --auto-video_nr --width 640 --height 480 --encoding jpeg') #initiate uv4l video streaming server
+    process = sp.Popen('python /home/pi/NOMAD/web/webserver.py', shell=True, stdout=sp.PIPE, stderr=sp.PIPE) #start flask server
     main()
     os.system('pkill uv4l') #kill uv4l video streaming server
-    check_kill_process("python")
+    check_kill_process("python") # kill flask server
+    process.kill() # kill flask server dead
 
 
 #features
