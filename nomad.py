@@ -14,9 +14,9 @@ from HOST import get_ip
 from SR04 import ping
 
 rpiIP = str(get_ip()) #sets ip address of raspberry pi
-MAX_DISTANCE = 300 # sets maximum useable sensor measuring distance to 300cm
+# MAX_DISTANCE = 300 # sets maximum useable sensor measuring distance to 300cm
 COLL_DIST = 45 # sets distance at which robot stops and reverses to 30cm
-TURN_DIST = COLL_DIST+20 # sets distance at which robot veers away from object
+# TURN_DIST = COLL_DIST+20 # sets distance at which robot veers away from object
 
 #distances on either side
 leftDistance = 0
@@ -99,9 +99,16 @@ def set_servo_pulse(channel, pulse):
 
 
 def message(input):
-    """sends current status to flask server"""
-    url = "http://%s:5000/events" %(rpiIP)
-    payload = "{\"value\":\"%s\"}" %(input)
+    """sends current status to flask server
+    
+    :param input: message to be sent
+    :type input: string
+    :returns: N/A
+    :rtype: N/A
+    """
+
+    url = "http://%s:5000/events" % (rpiIP)
+    payload = "{\"value\":\"%s\"}" % (input)
     headers = {
         'content-type': "application/json",
         'cache-control': "no-cache",
@@ -156,12 +163,20 @@ def change_path():
 
 
 def compare_distance(leftUnit,rightUnit):
-    """compares values and moves robot"""
-    if (leftUnit>rightUnit):
+    """compares values and moves robot
+    
+    :param leftUnit: ultrasonic reading left
+    :param rightUnit: ultrasonic reading right
+    :type leftUnit: int
+    :type rightUnit: int
+    :returns: N/A
+    :rtype: N/A
+    """
+    if (leftUnit > rightUnit):
         left(2)
         print("turning left")
         message("turning left")
-    elif (rightUnit>leftUnit):
+    elif (rightUnit > leftUnit):
         right(2)
         print("turning right")
         message("turning right")
@@ -181,7 +196,13 @@ def spawn_thread(arg):
 
 
 def check_kill_process(pstring):
-    """Kills python process"""
+    """Kills python process
+    
+    :param pstring: process name
+    :type input: string
+    :returns: N/A
+    :rtype: N/A
+    """
     for line in os.popen("ps ax | grep " + pstring + " | grep -v grep"):
         fields = line.split()
         pid = fields[0]
