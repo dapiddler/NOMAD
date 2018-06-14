@@ -44,4 +44,4 @@ def events():
 
 
 if __name__ == "__main__":
-	app.run(debug=True, host=str(config.LOCAL_DNS_HOST))
+	app.run(debug=False, host=str(config.LOCAL_DNS_HOST))
