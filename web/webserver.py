@@ -28,7 +28,6 @@ def stuff():
 	global heading
 	if request.method == 'GET':
 		if heading:
-			#test = str(datetime.now())
 			print heading['value']
 			return (heading['value'])
 		else :

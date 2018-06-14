@@ -13,6 +13,7 @@ import RPi.GPIO as gpio
 from HOST import get_ip
 from SR04 import ping
 
+
 rpiIP = str(get_ip()) #sets ip address of raspberry pi
 # MAX_DISTANCE = 300 # sets maximum useable sensor measuring distance to 300cm
 COLL_DIST = 45 # sets distance at which robot stops and reverses to 30cm
@@ -24,14 +25,12 @@ rightDistance = 0
 curDist = 0
 
 pwm = PCA9685.PCA9685()
+pwm.set_pwm_freq(60) # Set frequency to 60hz, good for servos.
 
 # Configure min and max servo pulse lengths
 servo_min = 300  # Min pulse length out of 4096
 servo_max = 500  # Max pulse length out of 4096
 servo_mid = 405 # Mid pulse length out of 4096
-
-# Set frequency to 60hz, good for servos.
-pwm.set_pwm_freq(60)
 
 def init():
     '''setup GPIO Pins'''
@@ -213,6 +212,7 @@ def main():
     '''main loop'''
     sleep_value = .035
     init()
+    t = None
     stdscr = curses.initscr()
     curses.noecho()
     try:
@@ -259,6 +259,7 @@ def main():
     except NameError:
         stop()
         gpio.cleanup()
+
     curses.endwin()
 
 
@@ -266,6 +267,8 @@ if __name__ == "__main__":
     os.system('uv4l --driver raspicam --auto-video_nr --width 640 --height 480 --encoding jpeg') #initiate uv4l video streaming server
     process = sp.Popen('python /home/pi/NOMAD/web/webserver.py', shell=True, stdout=sp.PIPE, stderr=sp.PIPE) #start flask server
     main()
+    time.sleep(1)
+    gpio.cleanup()
     os.system('pkill uv4l') #kill uv4l video streaming server
     check_kill_process("python") # kill flask server
     process.kill() # kill flask server dead
