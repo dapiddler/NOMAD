@@ -208,7 +208,7 @@ def check_kill_process(pstring):
 
 
 def shutdown():
-    '''Shutdown Script Procedure/Cleanup'''
+    '''Shutdown Script/Cleanup'''
     os.system('pkill uv4l')  # kill uv4l video streaming server
     check_kill_process("python")  # kill flask server
     process.kill()  # kill flask server dead
