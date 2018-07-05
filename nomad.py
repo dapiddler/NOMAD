@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import os
 import sys
 import time
@@ -10,14 +11,11 @@ import threading
 import curses.textpad
 import subprocess as sp
 import RPi.GPIO as gpio
-from HOST import get_ip
+from network import get_ip
 from SR04 import ping
 
-
 rpiIP = str(get_ip()) #sets ip address of raspberry pi
-# MAX_DISTANCE = 300 # sets maximum useable sensor measuring distance to 300cm
 COLL_DIST = 45 # sets distance at which robot stops and reverses to 30cm
-# TURN_DIST = COLL_DIST+20 # sets distance at which robot veers away from object
 
 #distances on either side
 leftDistance = 0
@@ -31,6 +29,7 @@ pwm.set_pwm_freq(60) # Set frequency to 60hz, good for servos.
 servo_min = 300  # Min pulse length out of 4096
 servo_max = 500  # Max pulse length out of 4096
 servo_mid = 405 # Mid pulse length out of 4096
+
 
 def init():
     '''setup GPIO Pins'''
@@ -117,22 +116,22 @@ def message(input):
 
 
 def servo_left():
-    """Physically move servo to left most position"""
+    '''Physically move servo to left most position'''
     pwm.set_pwm(0, 0, servo_min)
 
 
 def servo_center():
-    """Physically move servo to center position"""
+    '''Physically move servo to center position'''
     pwm.set_pwm(0, 0, servo_mid)
 
 
 def servo_right():
-    """Physically move servo to right most position"""
+    '''Physically move servo to right most position'''
     pwm.set_pwm(0, 0, servo_max)
 
 
 def ai_loop():
-    """Main obstacle avoidance loop"""
+    '''Main obstacle avoidance loop'''
     servo_center()
     curDist = ping() # read distance in cm
     if (curDist < COLL_DIST):
@@ -144,7 +143,7 @@ def ai_loop():
 
 
 def change_path():
-    """stores distance values and calls function"""
+    '''stores distance values and calls function'''
     print("stopping")
     servo_right()
     time.sleep(.5)
@@ -162,7 +161,7 @@ def change_path():
 
 
 def compare_distance(leftUnit,rightUnit):
-    """compares values and moves robot
+    '''compares values and moves robot
     
     :param leftUnit: ultrasonic reading left
     :param rightUnit: ultrasonic reading right
@@ -170,7 +169,7 @@ def compare_distance(leftUnit,rightUnit):
     :type rightUnit: int
     :returns: N/A
     :rtype: N/A
-    """
+    '''
     if (leftUnit > rightUnit):
         left(2)
         print("turning left")
@@ -186,7 +185,7 @@ def compare_distance(leftUnit,rightUnit):
 
 
 def spawn_thread(arg):
-    """create AI thread with exit flag"""
+    '''create AI thread with exit flag'''
     t = threading.currentThread()
     while getattr(t, "do_run", True):
         print ("working on %s" % arg)
@@ -195,17 +194,24 @@ def spawn_thread(arg):
 
 
 def check_kill_process(pstring):
-    """Kills python process
+    '''Kills python process
     
     :param pstring: process name
     :type input: string
     :returns: N/A
     :rtype: N/A
-    """
+    '''
     for line in os.popen("ps ax | grep " + pstring + " | grep -v grep"):
         fields = line.split()
         pid = fields[0]
         os.kill(int(pid), signal.SIGKILL)
+
+
+def shutdown():
+    '''Shutdown Script Procedure/Cleanup'''
+    os.system('pkill uv4l')  # kill uv4l video streaming server
+    check_kill_process("python")  # kill flask server
+    process.kill()  # kill flask server dead
 
 
 def main():
@@ -251,25 +257,22 @@ def main():
                     t.join()
                     stop()
                     gpio.cleanup()
+                    curses.endwin()
                     break
                 else:
                     stop()
                     gpio.cleanup()
+                    curses.endwin()
                     break
     except NameError:
         stop()
         gpio.cleanup()
-
-    curses.endwin()
-
+        curses.endwin()
 
 if __name__ == "__main__":
     os.system('uv4l --driver raspicam --auto-video_nr --width 640 --height 480 --encoding jpeg') #initiate uv4l video streaming server
     process = sp.Popen('python /home/pi/NOMAD/web/webserver.py', shell=True, stdout=sp.PIPE, stderr=sp.PIPE) #start flask server
     main()
-    time.sleep(1)
-    gpio.cleanup()
-    os.system('pkill uv4l') #kill uv4l video streaming server
-    check_kill_process("python") # kill flask server
-    process.kill() # kill flask server dead
+    shutdown()
+
 
